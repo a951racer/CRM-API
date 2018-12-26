@@ -31,7 +31,7 @@ export const login = (req, res) => {
            if (!user.comparePassword(req.body.password, user.hashPassword)) {
                 res.status(401).json({ message: 'Authentication failed. Wrong password!'});
        } else {
-           return res.json({token: jwt.sign({ email: user.email, username: user.username, _id: user.id}, 'RESTFULAPIs')});  // RESTFULAPIs is a secret phrase - move to env vars
+           return res.json({token: jwt.sign({ email: user.email, username: user.username, _id: user.id}, process.env.SESSION_SECRET)});
        }
     }
    }); 
