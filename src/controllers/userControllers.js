@@ -31,7 +31,13 @@ export const login = (req, res) => {
            if (!user.comparePassword(req.body.password, user.hashPassword)) {
                 res.status(401).json({ message: 'Authentication failed. Wrong password!'});
        } else {
-           return res.json({token: jwt.sign({ email: user.email, username: user.username, _id: user.id}, process.env.SESSION_SECRET)});
+            let loggedinUser = {}
+            for (let key of Object.keys(user._doc)) {
+                loggedinUser[key] = user[key];
+            }
+            loggedinUser.hashPassword = undefined;
+            loggedinUser.token = jwt.sign({ email: user.email, username: user.username, _id: user.id}, process.env.SESSION_SECRET);
+            return res.json(loggedinUser);
        }
     }
    }); 

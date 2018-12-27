@@ -3,7 +3,9 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import jsonwebtoken from 'jsonwebtoken';
 import routes from './src/routes/crmRoutes';
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
+import cors from 'cors';
+import morgan from 'morgan';
 
 dotenv.config({ path: './config.env' });
 const app = express();
@@ -17,10 +19,12 @@ conn_string += process.env.DB_PASSWORD + '@';
 conn_string += process.env.DB_CLUSTER + '/';
 conn_string += process.env.DB_NAME + '?';
 conn_string += process.env.DB_OPTIONS;
-console.log(conn_string);
 mongoose.connect(conn_string, {
     useMongoClient: true
 });
+
+app.use(cors());
+app.use(morgan('dev'));
 
 // bodyparser setup
 app.use(bodyParser.urlencoded({ extended: true }));
