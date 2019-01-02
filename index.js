@@ -6,8 +6,7 @@ import routes from './src/routes/crmRoutes';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import morgan from 'morgan';
-
-// helmet
+import helmet from 'helmet';
 
 dotenv.config();
 const app = express();
@@ -26,8 +25,8 @@ mongoose.connect(conn_string, {
 });
 
 app.use(cors());
+app.use(helmet());
 app.use(morgan('dev'));
-//app.use(helmet());
 
 // bodyparser setup
 app.use(bodyParser.urlencoded({ extended: true }));
