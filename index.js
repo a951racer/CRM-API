@@ -7,7 +7,9 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import morgan from 'morgan';
 
-dotenv.config({ path: './config.env' });
+// helmet
+
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
 
@@ -25,6 +27,7 @@ mongoose.connect(conn_string, {
 
 app.use(cors());
 app.use(morgan('dev'));
+//app.use(helmet());
 
 // bodyparser setup
 app.use(bodyParser.urlencoded({ extended: true }));
