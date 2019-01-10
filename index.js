@@ -8,7 +8,8 @@ import cors from 'cors';
 import morgan from 'morgan';
 import helmet from 'helmet';
 
-dotenv.config();
+dotenv.config({path: './config.env'});
+//dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
 

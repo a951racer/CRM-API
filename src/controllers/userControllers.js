@@ -14,8 +14,7 @@ export const register = (req, res) => {
                 message: err
             });
         } else {
-            user.hashPassword = undefined;
-            return res.json(user);
+            return res.json(getLoggedInUser(user));
         }
     })
 }
@@ -31,19 +30,7 @@ export const login = (req, res) => {
            if (!user.comparePassword(req.body.password, user.hashPassword)) {
                 res.status(401).json({ message: 'Authentication failed. Wrong password!'});
        } else {
-            let loggedinUser = {}
-            for (let key of Object.keys(user._doc)) {
-                loggedinUser[key] = user[key];
-            }
-            loggedinUser.hashPassword = undefined;
-            loggedinUser.token = jwt.sign(
-                { 
-                    email: user.email, 
-                    username: user.username, 
-                    _id: user.id
-                }, 
-                process.env.SESSION_SECRET);
-            return res.json(loggedinUser);
+            return res.json(getLoggedInUser(user));
        }
     }
    }); 
@@ -55,4 +42,20 @@ export const loginRequired = (req, res, next) => {
     } else {
         return res.status(401).json({ message: 'Unauthorized user!'});
     }
+}
+
+const getLoggedInUser = (user) => {
+    let loggedinUser = {}
+    for (let key of Object.keys(user._doc)) {
+        loggedinUser[key] = user[key];
+    }
+    loggedinUser.hashPassword = undefined;
+    loggedinUser.token = jwt.sign(
+        { 
+            email: user.email, 
+            username: user.username, 
+            _id: user.id
+       }, 
+    process.env.SESSION_SECRET);
+    return loggedinUser;
 }
